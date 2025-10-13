@@ -7,13 +7,15 @@ import { BigNumberish, ethers, Wallet } from 'ethers';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
-import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
-import { MoonshotApiAdapter } from '../../infra/moonshot-api';
-import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
-import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
+import {
+  MoonshotApiAdapter,
+  SubmitMintTxOptions,
+  SubmitMintTxResponse,
+} from '../../infra/moonshot-api';
 import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 import { Network } from './Network';
+import { MintTxPrepareResponse, TxStatus } from '@heliofi/launchpad-common';
 
 export class Moonshot {
   private factory: MoonshotFactory;
@@ -35,7 +37,7 @@ export class Moonshot {
     );
 
     this.moonshotFactoryAddress = moonshotFactoryAddress;
-    this.network = options.network || Network.BASE;
+    this.network = options.network || Network.ABSTRACT;
 
     this.factory = MoonshotFactory__factory.connect(
       moonshotFactoryAddress,
@@ -47,19 +49,19 @@ export class Moonshot {
 
   async prepareMintTx(
     options: PrepareMintTxOptions,
-  ): Promise<MintTokenPrepareV1Response> {
+  ): Promise<MintTxPrepareResponse> {
     return this.apiAdapter.prepareMint({
       ...options,
-      creatorId: options.creator,
+      creatorPK: options.creator,
     });
   }
 
   async submitMintTx(
     options: SubmitMintTxOptions,
   ): Promise<SubmitMintTxResponse> {
-    const res = await this.apiAdapter.submitMint(options.tokenId, options);
+    const res = await this.apiAdapter.submitMint(options);
     return {
-      txSignature: res.txnId,
+      txSignature: res.transactionSignature,
       status: res.status,
     };
   }

@@ -1,11 +1,13 @@
 import { Environment, Network } from '../../domain';
-import { MintTokenPrepareV1Request } from './MintTokenPrepareV1Request';
-import { MintTokenPrepareV1Response } from './MintTokenPrepareV1Response';
-import { MintTokenSubmitV1Request } from './MintTokenSubmitV1Request';
-import { MintTokenSubmitV1Response } from './MintTokenSubmitV1Response';
 import { ApiClient } from '../http';
-import { getMoonshotApiChainId } from '../../domain/utils/getMoonshotApiChainId';
-import { getMintTokenCurveType } from '../../domain/utils/getMintTokenCurveType';
+import {
+  CreateMintResponse,
+  CreateMintWithMetadataDto,
+  MintTxPrepareDto,
+  MintTxPrepareResponse,
+  MintTxSubmitDto,
+  MintTxSubmitResponse,
+} from '@heliofi/launchpad-common';
 
 export class MoonshotApiAdapter {
   private apiClient: ApiClient;
@@ -14,11 +16,11 @@ export class MoonshotApiAdapter {
 
   private readonly network: Network;
 
-  constructor(environment: Environment, network: Network = Network.BASE) {
+  constructor(environment: Environment, network: Network = Network.ABSTRACT) {
     const apiBasePath =
       environment === Environment.MAINNET
-        ? 'https://api.moonshot.cc'
-        : 'https://api-devnet.moonshot.cc';
+        ? 'https://api.mintlp.io/v1'
+        : 'https://api.dev.mintlp.io/v1';
 
     this.env = environment;
     this.network = network;
@@ -26,32 +28,38 @@ export class MoonshotApiAdapter {
   }
 
   async prepareMint(
-    prepareBuyDto: Omit<MintTokenPrepareV1Request, 'chainId' | 'curveType'>,
-  ): Promise<MintTokenPrepareV1Response> {
-    const chainId = getMoonshotApiChainId(this.env, this.network);
-    const curveType = getMintTokenCurveType(this.network);
+    createAndPrepareMintDto: CreateMintWithMetadataDto & MintTxPrepareDto,
+  ): Promise<MintTxPrepareResponse> {
+    const { amount, creatorPK, ...createMintDto } = createAndPrepareMintDto;
 
-    return this.apiClient.publicRequest(`/tokens/v1`, {
+    const { pairId } = await this.createMint(createMintDto);
+
+    return this.apiClient.publicRequest(`abstract/${pairId}/sdk`, {
       method: 'POST',
       data: {
-        ...prepareBuyDto,
-        curveType,
-        chainId,
+        amount,
+        creatorPK,
       },
     });
   }
 
-  submitMint(
-    draftTokenId: string,
-    submitDto: MintTokenSubmitV1Request,
-  ): Promise<MintTokenSubmitV1Response> {
-    return this.apiClient.authedRequest(
-      `/tokens/v1/${draftTokenId}/submit`,
-      'TMP_TOKEN',
-      {
+  submitMint(submitDto: MintTxSubmitDto): Promise<MintTxSubmitResponse> {
+    return this.apiClient.authedRequest('/abstract/sdk', 'TMP_TOKEN', {
+      method: 'POST',
+      data: submitDto,
+    });
+  }
+
+  private async createMint(
+    createMintDto: CreateMintWithMetadataDto,
+  ): Promise<CreateMintResponse> {
+    if (this.network === Network.ABSTRACT) {
+      return this.apiClient.publicRequest(`/create/abstract/metadata/sdk`, {
         method: 'POST',
-        data: submitDto,
-      },
-    );
+        data: createMintDto,
+      });
+    }
+
+    throw new Error('Unsupported network');
   }
 }
