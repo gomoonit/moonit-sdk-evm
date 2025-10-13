@@ -54,7 +54,7 @@ export class Token {
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
-    const getSignerWithProvider = options.moonshot.getSignerWithProvider();
+    const getSignerWithProvider = options.moonit.getSignerWithProvider();
 
     const token = MoonshotToken__factory.connect(
       options.tokenAddress,
@@ -74,7 +74,7 @@ export class Token {
 
     const factoryAddress = await token.factory();
 
-    if (factoryAddress !== (await options.moonshot.getFactory().getAddress())) {
+    if (factoryAddress !== (await options.moonit.getFactory().getAddress())) {
       console.warn(
         'Token created by old Moonshot Factory, that is no longer supported.',
       );
@@ -82,7 +82,7 @@ export class Token {
 
     return new Token(
       token,
-      options.moonshot,
+      options.moonit,
       tokenCurveAdapter,
       await token.getAddress(),
       factoryAddress,
@@ -201,7 +201,7 @@ export class Token {
     return this.token.balanceOf(address);
   }
 
-  async approveForMoonshotSell(
+  async approveForMoonitSell(
     amount: bigint,
   ): Promise<ContractTransactionResponse> {
     return this.token.approve(this.factoryAddress, amount);

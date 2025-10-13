@@ -5,7 +5,7 @@ import { Moonit } from '../moonit';
 
 export interface InitTokenOptions {
   tokenAddress: string;
-  moonshot: Moonit;
+  moonit: Moonit;
   curveType?: CurveType;
   provider?: ethers.JsonRpcProvider; // @deprecated
 }

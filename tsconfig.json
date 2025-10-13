@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "baseUrl": "./",
     "paths": {
-      "@wen-moon-ser/moonshot-sdk-evm": [
+      "@moonit/sdk-evm": [
         "./src/*"
       ]
     }

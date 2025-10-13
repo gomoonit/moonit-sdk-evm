@@ -6,7 +6,7 @@ import {
 import { BigNumberish, ethers, Wallet } from 'ethers';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
-import { MoonshotInitOptions } from './MoonshotInitOptions';
+import { MoonitInitOptions } from './MoonitInitOptions';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
 import {
   MoonitApiAdapter,
@@ -29,7 +29,7 @@ export class Moonit {
 
   private network: Network;
 
-  constructor(options: MoonshotInitOptions) {
+  constructor(options: MoonitInitOptions) {
     this.signerWithProvider = options.signer;
 
     const moonshotFactoryAddress = getMoonshotFactoryAddress(
