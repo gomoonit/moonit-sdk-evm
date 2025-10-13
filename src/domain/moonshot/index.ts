@@ -1,6 +1,6 @@
 export * from './Moonshot';
 export * from './Addresses';
 export * from './Environment';
-export * from './MigrationDex';
 export * from './MintTokenCurveType';
 export * from './Network';
+export * from './MigrationDex';

@@ -21,13 +21,12 @@ import {
 import { PrepareTxOptions } from './PrepareTxOptions';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { Moonshot, Network } from '../moonshot';
+import { Moonshot } from '../moonshot';
 
 import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../utils/bipsToPercentageConverter';
-import { BeraConstantProductCurveV1Adapter } from '../curve/BeraConstantProductCurveAdapter';
 
 export class Token {
   private tokenAddress: string;
@@ -68,12 +67,7 @@ export class Token {
       tokenCurveAdapterType.toString() ==
       CurveType.ConstantProductCurveV1.toString()
     ) {
-      const network = options.moonshot.getNetwork();
-      if (network === Network.BERA) {
-        tokenCurveAdapter = new BeraConstantProductCurveV1Adapter(token);
-      } else {
-        tokenCurveAdapter = new EvmConstantProductCurveV1Adapter(token);
-      }
+      tokenCurveAdapter = new EvmConstantProductCurveV1Adapter(token);
     } else {
       throw new Error('Unsupported curve type');
     }

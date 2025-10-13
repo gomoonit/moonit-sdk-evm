@@ -15,7 +15,8 @@ import {
 } from '../../infra/moonshot-api';
 import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 import { Network } from './Network';
-import { MintTxPrepareResponse, TxStatus } from '@heliofi/launchpad-common';
+import { MigrationDex, MintTxPrepareResponse } from '@heliofi/launchpad-common';
+import { SDKMigrationDex } from './MigrationDex';
 
 export class Moonshot {
   private factory: MoonshotFactory;
@@ -53,6 +54,10 @@ export class Moonshot {
     return this.apiAdapter.prepareMint({
       ...options,
       creatorPK: options.creator,
+      amount: options.tokenAmount,
+      migrationDex: this.mapMigrationDexToCommonMigrationDex(
+        options.migrationDex,
+      ),
     });
   }
 
@@ -200,5 +205,17 @@ export class Moonshot {
 
   getNetwork(): Network {
     return this.network;
+  }
+
+  private mapMigrationDexToCommonMigrationDex(
+    migrationDex: SDKMigrationDex,
+  ): MigrationDex {
+    if (this.network === Network.ABSTRACT) {
+      return migrationDex === 'ABSTRACTSWAP'
+        ? MigrationDex.UNISWAP
+        : MigrationDex.AERODROME;
+    }
+
+    throw new Error('Unsupported network');
   }
 }

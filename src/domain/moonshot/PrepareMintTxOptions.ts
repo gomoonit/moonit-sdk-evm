@@ -1,5 +1,4 @@
-import { MigrationDex } from '@heliofi/launchpad-common';
-import { MintTokenCurveType } from '../../domain';
+import { SDKMigrationDex } from '../../domain';
 
 export interface PrepareMintTxOptions {
   /**
@@ -23,7 +22,7 @@ export interface PrepareMintTxOptions {
   /**
    * DEX to use for token migration
    */
-  migrationDex: MigrationDex.UNISWAP | MigrationDex.AERODROME;
+  migrationDex: SDKMigrationDex;
 
   /**
    * Token icon encoded in base64 format
