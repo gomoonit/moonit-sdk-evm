@@ -17,12 +17,10 @@ export class MoonshotApiAdapter {
   private readonly network: Network;
 
   constructor(environment: Environment, network: Network = Network.ABSTRACT) {
-    // const apiBasePath =
-    //   environment === Environment.MAINNET
-    //     ? 'https://api.mintlp.io/v1'
-    //     : 'https://api.dev.mintlp.io/v1';
-
-    const apiBasePath = 'http://localhost:8080/v1';
+    const apiBasePath =
+      environment === Environment.MAINNET
+        ? 'https://api.mintlp.io/v1'
+        : 'https://api.dev.mintlp.io/v1';
 
     this.env = environment;
     this.network = network;
