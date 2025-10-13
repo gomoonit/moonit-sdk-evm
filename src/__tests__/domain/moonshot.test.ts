@@ -1,4 +1,4 @@
-import { Environment, FixedSide, Moonshot, Network, Token } from '../../domain';
+import { Environment, FixedSide, Moonit, Network, Token } from '../../domain';
 import { ethers, JsonRpcProvider, Transaction, Wallet } from 'ethers';
 import { applyNegativeSlippage } from '../../domain/utils/bipsToPercentageConverter';
 
@@ -9,7 +9,7 @@ const mockImg =
 
 describe('Moonshot', () => {
   const testWallet = process.env.TEST_DEV_WALLET;
-  let moonshot: Moonshot;
+  let moonshot: Moonit;
 
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
   const signer = new Wallet(testWallet as string, provider);
@@ -131,7 +131,7 @@ describe('Moonshot', () => {
   };
 
   beforeAll(() => {
-    moonshot = new Moonshot({
+    moonshot = new Moonit({
       signer,
       env: Environment.TESTNET,
       network: Network.ABSTRACT,

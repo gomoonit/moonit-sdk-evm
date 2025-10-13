@@ -9,23 +9,23 @@ import { AmountAndFee } from './AmountAndFee';
 import { MoonshotInitOptions } from './MoonshotInitOptions';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
 import {
-  MoonshotApiAdapter,
+  MoonitApiAdapter,
   SubmitMintTxOptions,
   SubmitMintTxResponse,
-} from '../../infra/moonshot-api';
+} from '../../infra/moonit-api';
 import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 import { Network } from './Network';
 import { MigrationDex, MintTxPrepareResponse } from '@heliofi/launchpad-common';
 import { SDKMigrationDex } from './MigrationDex';
 
-export class Moonshot {
+export class Moonit {
   private factory: MoonshotFactory;
 
   private moonshotFactoryAddress: string;
 
   private signerWithProvider: Wallet;
 
-  private apiAdapter: MoonshotApiAdapter;
+  private apiAdapter: MoonitApiAdapter;
 
   private network: Network;
 
@@ -45,7 +45,7 @@ export class Moonshot {
       this.signerWithProvider,
     );
 
-    this.apiAdapter = new MoonshotApiAdapter(options.env, options.network);
+    this.apiAdapter = new MoonitApiAdapter(options.env, options.network);
   }
 
   async prepareMintTx(

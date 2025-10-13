@@ -9,7 +9,7 @@ import {
   MintTxSubmitResponse,
 } from '@heliofi/launchpad-common';
 
-export class MoonshotApiAdapter {
+export class MoonitApiAdapter {
   private apiClient: ApiClient;
 
   private readonly env: Environment;

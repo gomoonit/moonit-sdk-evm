@@ -21,7 +21,7 @@ import {
 import { PrepareTxOptions } from './PrepareTxOptions';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { Moonshot } from '../moonshot';
+import { Moonit } from '../moonit';
 
 import {
   applyNegativeSlippage,
@@ -33,7 +33,7 @@ export class Token {
 
   private token: MoonshotToken;
 
-  private factory: Moonshot;
+  private factory: Moonit;
 
   private factoryAddress: string;
 
@@ -41,7 +41,7 @@ export class Token {
 
   private constructor(
     token: MoonshotToken,
-    factory: Moonshot,
+    factory: Moonit,
     tokenCurveAdapter: AbstractCurveAdapter,
     tokenAddress: string,
     factoryAddress: string,

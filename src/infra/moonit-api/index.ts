@@ -1,3 +1,3 @@
-export * from './MoonshotApiAdapter';
+export * from './MoonitApiAdapter';
 export * from './SubmitMintTxOptions';
 export * from './SubmitMintTxResponse';

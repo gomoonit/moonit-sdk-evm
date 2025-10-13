@@ -1,11 +1,11 @@
 import { CurveType } from '@heliofi/launchpad-common';
 import { ethers } from 'ethers';
 
-import { Moonshot } from '../moonshot';
+import { Moonit } from '../moonit';
 
 export interface InitTokenOptions {
   tokenAddress: string;
-  moonshot: Moonshot;
+  moonshot: Moonit;
   curveType?: CurveType;
   provider?: ethers.JsonRpcProvider; // @deprecated
 }

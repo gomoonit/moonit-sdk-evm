@@ -1,4 +1,4 @@
-import { SDKMigrationDex } from '../../domain';
+import { SDKMigrationDex } from '..';
 
 export interface PrepareMintTxOptions {
   /**

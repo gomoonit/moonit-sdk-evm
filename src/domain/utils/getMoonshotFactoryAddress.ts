@@ -3,7 +3,7 @@ import {
   ABSTRACT_TESTNET_ADDRESS,
   Environment,
   Network,
-} from '../moonshot';
+} from '../moonit';
 
 export const getMoonshotFactoryAddress = (
   env: Environment,
