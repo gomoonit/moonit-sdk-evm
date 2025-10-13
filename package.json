@@ -1,5 +1,5 @@
 {
-  "name": "@moonit/evm-sdk",
+  "name": "@moonit/sdk-evm",
   "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",

@@ -4,22 +4,22 @@ Moonit SDK for EVM helps calculate moonit token prices at any point in the bondi
 
 By Following the example you can create your high-performance trading bot within minutes.
 
-[npm link](https://www.npmjs.com/package/@moonit/evm-sdk)
+[npm link](https://www.npmjs.com/package/@moonit/sdk-evm)
 
 ## Installation
 
 Install the package using `yarn` or `npm`
 
 ```shell
-npm i @moonit/evm-sdk
+npm i @moonit/sdk-evm
 # or
-yarn add @moonit/evm-sdk
+yarn add @moonit/sdk-evm
 ```
 
 ### Initialization
 
 ```typescript
-import { Environment, Moonit, Network } from '@moonit/evm-sdk';
+import { Environment, Moonit, Network } from '@moonit/sdk-evm';
 
 const provider = new JsonRpcProvider(process.env.RPC_URL as string);
 const signer = new Wallet('private_key', provider);
@@ -35,7 +35,7 @@ const moonit = new Moonit({
 
 ```typescript
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
-import { Environment, FixedSide, Moonit, Token } from '@moonit/evm-sdk';
+import { Environment, FixedSide, Moonit, Token } from '@moonit/sdk-evm';
 
 const buyExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
@@ -103,7 +103,7 @@ const buyExactIn = async (tokenAddress: string) => {
 
 ```typescript
 import { JsonRpcProvider, Wallet } from 'ethers';
-import { Environment, FixedSide, Moonit, Token } from '@moonit/evm-sdk';
+import { Environment, FixedSide, Moonit, Token } from '@moonit/sdk-evm';
 
 const sellExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
@@ -177,7 +177,7 @@ import {
   MigrationDex,
   MintTokenCurveType,
   Moonit,
-} from '@moonit/evm-sdk';
+} from '@moonit/sdk-evm';
 import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
 
 const mintTx = async () => {
