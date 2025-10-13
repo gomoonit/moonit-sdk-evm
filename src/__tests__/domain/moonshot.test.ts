@@ -76,12 +76,12 @@ describe('Moonit', () => {
     tokenAmount: bigint,
   ): Promise<void> => {
     const token = await Token.create({
-      moonshot,
+      moonit,
       provider,
       tokenAddress,
     });
 
-    const approveTx = await token.approveForMoonshotSell(tokenAmount);
+    const approveTx = await token.approveForMoonitSell(tokenAmount);
 
     await approveTx.wait();
 

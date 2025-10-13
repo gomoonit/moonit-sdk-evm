@@ -24,7 +24,7 @@ import { Environment, Moonit, Network } from '@moonit/evm-sdk';
 const provider = new JsonRpcProvider(process.env.RPC_URL as string);
 const signer = new Wallet('private_key', provider);
 
-const moonshot = new Moonit({
+const moonit = new Moonit({
   signer,
   env: Environment.TESTNET,
   network: Network.ABSTRACT,
@@ -123,7 +123,7 @@ const sellExactIn = async (tokenAddress: string) => {
 
   const tokenAmount = await token.balanceOf(walletAddress);
 
-  await token.approveForMoonshotSell(tokenAmount);
+  await token.approveForMoonitSell(tokenAmount);
 
   const collateralAmountForTransaction =
     await token.getCollateralAmountByTokens({
