@@ -4,22 +4,22 @@ Moonshot SDK for EVM helps calculate moonshot token prices at any point in the b
 
 By Following the example you can create your high-performance trading bot within minutes.
 
-[npm link](https://www.npmjs.com/package/@wen-moon-ser/moonshot-sdk-evm)
+[npm link](https://www.npmjs.com/package/@moonit/evm-sdk)
 
 ## Installation
 
 Install the package using `yarn` or `npm`
 
 ```shell
-npm i @wen-moon-ser/moonshot-sdk-evm
+npm i @moonit/evm-sdk
 # or
-yarn add @wen-moon-ser/moonshot-sdk-evm
+yarn add @moonit/evm-sdk
 ```
 
 ### Initialization
 
 ```typescript
-import { Environment, Moonshot, Network } from '@wen-moon-ser/moonshot-sdk-evm';
+import { Environment, Moonshot, Network } from '@moonit/evm-sdk';
 
 const provider = new JsonRpcProvider(process.env.RPC_URL as string);
 const signer = new Wallet('private_key', provider);
@@ -35,12 +35,7 @@ const moonshot = new Moonshot({
 
 ```typescript
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
-import {
-  Environment,
-  FixedSide,
-  Moonshot,
-  Token,
-} from '@wen-moon-ser/moonshot-sdk-evm';
+import { Environment, FixedSide, Moonshot, Token } from '@moonit/evm-sdk';
 
 const buyExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
@@ -108,12 +103,7 @@ const buyExactIn = async (tokenAddress: string) => {
 
 ```typescript
 import { JsonRpcProvider, Wallet } from 'ethers';
-import {
-  Environment,
-  FixedSide,
-  Moonshot,
-  Token,
-} from '@wen-moon-ser/moonshot-sdk-evm';
+import { Environment, FixedSide, Moonshot, Token } from '@moonit/evm-sdk';
 
 const sellExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
@@ -187,7 +177,7 @@ import {
   MigrationDex,
   MintTokenCurveType,
   Moonshot,
-} from '@wen-moon-ser/moonshot-sdk-evm';
+} from '@moonit/evm-sdk';
 import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
 
 const mintTx = async () => {
