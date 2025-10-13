@@ -200,7 +200,7 @@ const mintTx = async () => {
     network: Network.ABSTRACT,
   });
 
-  const mockImg = '...';
+  const mockImg = 'data:image/png;base64,...';
 
   const prepMint = await moonshot.prepareMintTx({
     name: 'TEST_TOKEN',
