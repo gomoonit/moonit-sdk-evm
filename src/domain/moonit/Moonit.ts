@@ -6,27 +6,30 @@ import {
 import { BigNumberish, ethers, Wallet } from 'ethers';
 import { FixedSide } from '../token';
 import { AmountAndFee } from './AmountAndFee';
-import { MoonshotInitOptions } from './MoonshotInitOptions';
-import { MintTokenPrepareV1Response } from '../../infra/moonshot-api/MintTokenPrepareV1Response';
+import { MoonitInitOptions } from './MoonitInitOptions';
 import { PrepareMintTxOptions } from './PrepareMintTxOptions';
-import { MoonshotApiAdapter } from '../../infra/moonshot-api';
-import { SubmitMintTxOptions } from '../../infra/moonshot-api/SubmitMintTxOptions';
-import { SubmitMintTxResponse } from '../../infra/moonshot-api/SubmitMintTxResponse';
+import {
+  MoonitApiAdapter,
+  SubmitMintTxOptions,
+  SubmitMintTxResponse,
+} from '../../infra/moonit-api';
 import { getMoonshotFactoryAddress } from '../utils/getMoonshotFactoryAddress';
 import { Network } from './Network';
+import { MigrationDex, MintTxPrepareResponse } from '@heliofi/launchpad-common';
+import { SDKMigrationDex } from './MigrationDex';
 
-export class Moonshot {
+export class Moonit {
   private factory: MoonshotFactory;
 
   private moonshotFactoryAddress: string;
 
   private signerWithProvider: Wallet;
 
-  private apiAdapter: MoonshotApiAdapter;
+  private apiAdapter: MoonitApiAdapter;
 
   private network: Network;
 
-  constructor(options: MoonshotInitOptions) {
+  constructor(options: MoonitInitOptions) {
     this.signerWithProvider = options.signer;
 
     const moonshotFactoryAddress = getMoonshotFactoryAddress(
@@ -35,31 +38,35 @@ export class Moonshot {
     );
 
     this.moonshotFactoryAddress = moonshotFactoryAddress;
-    this.network = options.network || Network.BASE;
+    this.network = options.network || Network.ABSTRACT;
 
     this.factory = MoonshotFactory__factory.connect(
       moonshotFactoryAddress,
       this.signerWithProvider,
     );
 
-    this.apiAdapter = new MoonshotApiAdapter(options.env, options.network);
+    this.apiAdapter = new MoonitApiAdapter(options.env, options.network);
   }
 
   async prepareMintTx(
     options: PrepareMintTxOptions,
-  ): Promise<MintTokenPrepareV1Response> {
+  ): Promise<MintTxPrepareResponse> {
     return this.apiAdapter.prepareMint({
       ...options,
-      creatorId: options.creator,
+      creatorPK: options.creator,
+      amount: options.tokenAmount,
+      migrationDex: this.mapMigrationDexToCommonMigrationDex(
+        options.migrationDex,
+      ),
     });
   }
 
   async submitMintTx(
     options: SubmitMintTxOptions,
   ): Promise<SubmitMintTxResponse> {
-    const res = await this.apiAdapter.submitMint(options.tokenId, options);
+    const res = await this.apiAdapter.submitMint(options);
     return {
-      txSignature: res.txnId,
+      txSignature: res.transactionSignature,
       status: res.status,
     };
   }
@@ -198,5 +205,17 @@ export class Moonshot {
 
   getNetwork(): Network {
     return this.network;
+  }
+
+  private mapMigrationDexToCommonMigrationDex(
+    migrationDex: SDKMigrationDex,
+  ): MigrationDex {
+    if (this.network === Network.ABSTRACT) {
+      return migrationDex === 'ABSTRACTSWAP'
+        ? MigrationDex.UNISWAP
+        : MigrationDex.AERODROME;
+    }
+
+    throw new Error('Unsupported network');
   }
 }

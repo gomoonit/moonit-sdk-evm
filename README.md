@@ -1,52 +1,53 @@
-# @wen-moon-ser/moonshot-sdk-evm
+# @moonit/sdk-evm
 
-Moonshot SDK for EVM helps calculate moonshot token prices at any point in the bonding curve. The package also allows the users to generate buy and sell transactions, provide the slippage amount and fix it to a trading side.
+Moonit SDK for EVM helps calculate moonit token prices at any point in the bonding curve. The package also allows the users to generate buy and sell transactions, provide the slippage amount and fix it to a trading side.
 
 By Following the example you can create your high-performance trading bot within minutes.
 
-[npm link](https://www.npmjs.com/package/@wen-moon-ser/moonshot-sdk-evm)
+[npm link](https://www.npmjs.com/package/@moonit/sdk-evm)
 
 ## Installation
 
 Install the package using `yarn` or `npm`
 
 ```shell
-npm i @wen-moon-ser/moonshot-sdk-evm
+npm i @moonit/sdk-evm
 # or
-yarn add @wen-moon-ser/moonshot-sdk-evm
+yarn add @moonit/sdk-evm
 ```
 
 ### Initialization
 
 ```typescript
-import {Environment, Moonshot, Network} from "@wen-moon-ser/moonshot-sdk-evm";
+import { Environment, Moonit, Network } from '@moonit/sdk-evm';
 
 const provider = new JsonRpcProvider(process.env.RPC_URL as string);
 const signer = new Wallet('private_key', provider);
 
-const moonshot = new Moonshot({
+const moonit = new Moonit({
   signer,
   env: Environment.TESTNET,
-  network: Network.BASE, // Currently supporting Base and Abstract (Network.ABSTRACT)
+  network: Network.ABSTRACT,
 });
 ```
 
 ### Buy example
+
 ```typescript
-import {ethers, JsonRpcProvider, Wallet} from "ethers";
-import {Environment, FixedSide, Moonshot, Token} from "@wen-moon-ser/moonshot-sdk-evm";
+import { ethers, JsonRpcProvider, Wallet } from 'ethers';
+import { Environment, FixedSide, Moonit, Token } from '@moonit/sdk-evm';
 
 const buyExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
   const signer = new Wallet('private_key', provider);
 
-  const moonshot = new Moonshot({
+  const moonit = new Moonit({
     signer,
     env: Environment.TESTNET,
   });
 
   const token = await Token.create({
-    moonshot,
+    moonit,
     provider,
     tokenAddress,
   });
@@ -90,7 +91,7 @@ const buyExactIn = async (tokenAddress: string) => {
 
   const buyTxReceipt = await buyTxResponse.wait();
 
-  if(buyTxReceipt?.status === 1) {
+  if (buyTxReceipt?.status === 1) {
     const balance = await token.balanceOf(walletAddress);
 
     console.log(balance);
@@ -99,9 +100,10 @@ const buyExactIn = async (tokenAddress: string) => {
 ```
 
 ### Sell example
+
 ```typescript
-import {JsonRpcProvider, Wallet} from "ethers";
-import {Environment, FixedSide, Moonshot, Token} from "@wen-moon-ser/moonshot-sdk-evm";
+import { JsonRpcProvider, Wallet } from 'ethers';
+import { Environment, FixedSide, Moonit, Token } from '@moonit/sdk-evm';
 
 const sellExactIn = async (tokenAddress: string) => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
@@ -109,19 +111,19 @@ const sellExactIn = async (tokenAddress: string) => {
 
   const walletAddress = await signer.getAddress();
 
-  const moonshot = new Moonshot({
+  const moonit = new Moonit({
     signer,
     env: Environment.TESTNET,
   });
   const token = await Token.create({
-    moonshot,
+    moonit,
     provider,
     tokenAddress,
   });
 
   const tokenAmount = await token.balanceOf(walletAddress);
 
-  await token.approveForMoonshotSell(tokenAmount);
+  await token.approveForMoonitSell(tokenAmount);
 
   const collateralAmountForTransaction =
     await token.getCollateralAmountByTokens({
@@ -159,42 +161,47 @@ const sellExactIn = async (tokenAddress: string) => {
 
   const sellTxReceipt = await sellTxResponse.wait();
 
-  if(sellTxReceipt?.status === 1) {
+  if (sellTxReceipt?.status === 1) {
     const balance = await token.balanceOf(walletAddress);
 
     console.log(balance);
   }
 };
-
 ```
 
 ### Mint example
+
 ```typescript
-import {Environment, MigrationDex, MintTokenCurveType, Moonshot} from "@wen-moon-ser/moonshot-sdk-evm";
-import {JsonRpcProvider, Transaction, Wallet} from "ethers";
+import {
+  Environment,
+  MigrationDex,
+  MintTokenCurveType,
+  Moonit,
+} from '@moonit/sdk-evm';
+import { JsonRpcProvider, Transaction, Wallet } from 'ethers';
 
 const mintTx = async () => {
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
   const signer = new Wallet('private_key', provider);
 
-  const moonshot = new Moonshot({
+  const moonit = new Moonit({
     signer,
     env: Environment.TESTNET,
-    network: Network.BASE, // Network.ABSTRACT for abstract, and Network.KODIAK for BERA
+    network: Network.ABSTRACT,
   });
 
-  const mockImg = '...';
+  const mockImg = 'data:image/png;base64,...';
 
-  const prepMint = await moonshot.prepareMintTx({
+  const prepMint = await moonit.prepareMintTx({
     name: 'TEST_TOKEN',
     symbol: 'TEST_TOKEN',
-    migrationDex: MigrationDex.UNISWAP, // USE MigrationDex.ABSTRACTSWAP for abstract, and MigrationDex.KODIAK for BERA
+    migrationDex: 'ABOREAN',
     icon: mockImg,
     description: 'TEST_TOKEN',
-    links: [{ url: 'https://x.com', label: 'x handle' }],
+    x: 'https://x.com',
     banner: mockImg,
     creator: await signer.getAddress(),
-    tokenAmount: '10000000000000',
+    tokenAmount: '163943390006858329570895',
   });
 
   const deserializedTransaction = Transaction.from(
@@ -225,15 +232,14 @@ const mintTx = async () => {
   const receipt = await txResponse.wait();
 
   if (receipt?.status === 1) {
-    const res = await moonshot.submitMintTx({
+    const res = await moonit.submitMintTx({
       token: prepMint.token,
       signedTransaction: JSON.stringify(txResponse),
-      tokenId: prepMint.draftTokenId,
     });
 
     const createdTokenAddress = receipt?.logs[2].address;
 
     console.log(createdTokenAddress);
   }
-}
+};
 ```

@@ -1,4 +1,4 @@
-import { MintTokenCurveType, MigrationDex } from '../../domain';
+import { SDKMigrationDex } from '..';
 
 export interface PrepareMintTxOptions {
   /**
@@ -20,17 +20,9 @@ export interface PrepareMintTxOptions {
   symbol: string;
 
   /**
-   * Type of curve to use for token pricing
-   * Currently only CONSTANT_PRODUCT_V1 is supported
-   * LINEAR_V1 is a legacy curve
-   * @deprecated No longer needed, left it so it won't be breaking change
-   */
-  curveType?: MintTokenCurveType;
-
-  /**
    * DEX to use for token migration
    */
-  migrationDex: MigrationDex;
+  migrationDex: SDKMigrationDex;
 
   /**
    * Token icon encoded in base64 format
@@ -53,12 +45,6 @@ export interface PrepareMintTxOptions {
   tokenAmount?: string;
 
   /**
-   * Optional array of links associated with the token
-   * @optional
-   */
-  links?: { url: string; label: string }[];
-
-  /**
    * Token banner encoded in base64 format
    * @maxLength 5242880 (5MB)
    * @optional
@@ -66,9 +52,22 @@ export interface PrepareMintTxOptions {
   banner?: string;
 
   /**
-   * Base58 wallet public key of affiliate
+   * Website link
    */
-  affiliate?: {
-    wallet: string;
-  };
+  website?: string;
+
+  /**
+   * X link
+   */
+  x?: string;
+
+  /**
+   * Telegram link
+   */
+  telegram?: string;
+
+  /**
+   * Discord link
+   */
+  discord?: string;
 }

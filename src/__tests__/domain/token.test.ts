@@ -1,4 +1,4 @@
-import { Environment, FixedSide, Moonshot, Token } from '../../domain';
+import { Environment, FixedSide, Moonit, Token } from '../../domain';
 import { ethers, JsonRpcProvider, Wallet } from 'ethers';
 import { MoonshotFactory__factory } from '../../evm';
 import {
@@ -12,20 +12,20 @@ describe('Token', () => {
   const tokenAddress = '0xfCF8882C8d284e653489F2FB1C3F4574E446ad2A'; // Token Address on testnet
 
   const testWallet = process.env.TEST_DEV_WALLET;
-  let moonshot: Moonshot;
+  let moonit: Moonit;
   let token: Token;
 
   const provider = new JsonRpcProvider(process.env.RPC_URL as string);
   const signer = new Wallet(testWallet as string, provider);
 
   beforeAll(async () => {
-    moonshot = new Moonshot({
+    moonit = new Moonit({
       signer,
       env: Environment.TESTNET,
     });
 
     token = await Token.create({
-      moonshot,
+      moonit,
       provider,
       tokenAddress,
     });

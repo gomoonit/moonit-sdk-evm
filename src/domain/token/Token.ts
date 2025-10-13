@@ -21,20 +21,19 @@ import {
 import { PrepareTxOptions } from './PrepareTxOptions';
 import { InitTokenOptions } from './InitTokenOptions';
 import { FixedSide } from './FixedSide';
-import { Moonshot, Network } from '../moonshot';
+import { Moonit } from '../moonit';
 
 import {
   applyNegativeSlippage,
   applyPositiveSlippage,
 } from '../utils/bipsToPercentageConverter';
-import { BeraConstantProductCurveV1Adapter } from '../curve/BeraConstantProductCurveAdapter';
 
 export class Token {
   private tokenAddress: string;
 
   private token: MoonshotToken;
 
-  private factory: Moonshot;
+  private factory: Moonit;
 
   private factoryAddress: string;
 
@@ -42,7 +41,7 @@ export class Token {
 
   private constructor(
     token: MoonshotToken,
-    factory: Moonshot,
+    factory: Moonit,
     tokenCurveAdapter: AbstractCurveAdapter,
     tokenAddress: string,
     factoryAddress: string,
@@ -55,7 +54,7 @@ export class Token {
   }
 
   static async create(options: InitTokenOptions): Promise<Token> {
-    const getSignerWithProvider = options.moonshot.getSignerWithProvider();
+    const getSignerWithProvider = options.moonit.getSignerWithProvider();
 
     const token = MoonshotToken__factory.connect(
       options.tokenAddress,
@@ -68,19 +67,14 @@ export class Token {
       tokenCurveAdapterType.toString() ==
       CurveType.ConstantProductCurveV1.toString()
     ) {
-      const network = options.moonshot.getNetwork();
-      if (network === Network.BERA) {
-        tokenCurveAdapter = new BeraConstantProductCurveV1Adapter(token);
-      } else {
-        tokenCurveAdapter = new EvmConstantProductCurveV1Adapter(token);
-      }
+      tokenCurveAdapter = new EvmConstantProductCurveV1Adapter(token);
     } else {
       throw new Error('Unsupported curve type');
     }
 
     const factoryAddress = await token.factory();
 
-    if (factoryAddress !== (await options.moonshot.getFactory().getAddress())) {
+    if (factoryAddress !== (await options.moonit.getFactory().getAddress())) {
       console.warn(
         'Token created by old Moonshot Factory, that is no longer supported.',
       );
@@ -88,7 +82,7 @@ export class Token {
 
     return new Token(
       token,
-      options.moonshot,
+      options.moonit,
       tokenCurveAdapter,
       await token.getAddress(),
       factoryAddress,
@@ -207,7 +201,7 @@ export class Token {
     return this.token.balanceOf(address);
   }
 
-  async approveForMoonshotSell(
+  async approveForMoonitSell(
     amount: bigint,
   ): Promise<ContractTransactionResponse> {
     return this.token.approve(this.factoryAddress, amount);
