@@ -1,6 +1,6 @@
 {
   "name": "@moonit/sdk-evm",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha.1770755050",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
@@ -8,9 +8,10 @@
     "watch": "tsc --watch",
     "test": "jest",
     "lint": "eslint 'src/**/*.{js,ts}'",
-    "format": "prettier --write 'src/**/*.{js,ts,json,md}'"
+    "format": "prettier --write 'src/**/*.{js,ts,json,md}'",
+    "prepublishOnly": "rm -rf dist && npm run build"
   },
-  "repository": "git@github.com:@gomoonit/moonit-sdk-evm",
+  "repository": "https://github.com/gomoonit/moonit-sdk-evm",
   "author": "support@moonshot.cc",
   "license": "MIT",
   "devDependencies": {
