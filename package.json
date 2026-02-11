@@ -1,6 +1,6 @@
 {
   "name": "@moonit/sdk-evm",
-  "version": "0.0.2-alpha.1770755050",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
